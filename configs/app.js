@@ -1,33 +1,33 @@
-//Levantar servidor HTTP (express)
-//ESModules 
-'use strict'
+//Configuracion de express
 
-//Importaciones
-import express from 'express'
-import morgan from 'morgan'
-import helmet from 'helmet'
-import cors from 'cors'
-import { config } from "dotenv"
+//ECMAScript modules
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import {config} from 'dotenv' //Variables de entorno
 import userRoutes from '../src/user/user.routes.js'
+import animalRoutes from '../src/animal/animal.routes.js'
 
 
-//Configuraciones
-const app = express()
-config();
-const port = process.env.PORT || 3056
+//Configuraciones 
+const app = express();
+config()
+const port = process.env.PORT || 3200 //Utiliza el puerto que esta disponible en la varible de entorno o el 3200
 
-//Configuración del servidor
+//Configurar el servidor de express
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
-app.use(cors()) //Aceptar o denegar solicitudes de diferentes orígenes (local, remoto) / políticas de acceso
-app.use(helmet()) //Aplica capa de seguridad básica al servidor
-app.use(morgan('dev')) //Logs de solicitudes al servidor HTTP
+app.use(cors()) //Politicas de acceso
+app.use(helmet()) //Seguridad
+app.use(morgan('dev')) //Logger
 
-//Declaración de rutas
+//Declarar rutas
 app.use(userRoutes)
+app.use(animalRoutes)
 
 //Levantar el servidor
-export const initServer = ()=>{
+export const initServer = () => {
     app.listen(port)
-    console.log(`Server HTTP running in port ${port}`)
+    console.log(`Server running on port ${port}`)
 }

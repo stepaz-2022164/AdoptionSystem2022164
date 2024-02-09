@@ -1,35 +1,22 @@
-//Configuración a la conexión a la BD
-'use strict'
+//Configuracion de mongo
 
-import mongoose from "mongoose"
+import mongoose from'mongoose'
 
-export const connect = async()=>{
-    try{
-        //Proceso de conexión
-        mongoose.connection.on('error', ()=>{
-            console.log('MongoDB | could not be connect to mongodb')
+export const connect = async () =>{
+    try {
+        //Verifica si existe conexion
+        mongoose.connection.on('error', () =>{
+            console.log('Faied to connect')
             mongoose.disconnect()
         })
-        mongoose.connection.on('connecting', ()=>{
-            console.log('MongoDB | try connecting')
-        })
-        mongoose.connection.on('connected', ()=>{
-            console.log('MongoDB | connected to mongodb')
-        })
-        mongoose.connection.once('open', ()=>{
-            console.log('MongoDB | connected to database')
-        })
-        mongoose.connection.on('reconnected', ()=>{
-            console.log('MongoDB | reconected to mongodb')
-        })
-        mongoose.connection.on('disconnected', ()=>{
-            console.log('MongoDB | disconnected')
-        })
-        await mongoose.connect(process.env.URI_MONGO, {
-            serverSelectionTimeoutMS: 5000,
-            maxPoolSize: 50
-        })
-    }catch(err){
-        console.error('Database connection failed',err)
+
+        mongoose.connection.on('connecting', () => console.log('Waiting for connection'))
+        mongoose.connection.on('connected', () => console.log('Connected successfully'))
+        mongoose.connection.on('open', () => console.log('Database opened successfully'))
+        mongoose.connection.on('disconnected', () => console.log('Database disconnected'))
+
+        await mongoose.connect('mongodb://127.0.0.1:27017/AdoptionSystemAV24') //Espera a conectarse
+    } catch (err) {
+        console.error('Database connection error', err)
     }
 }
